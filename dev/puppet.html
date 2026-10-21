@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Personnage VTuber</title>
+    <style>
+      body { margin: 0; background: #1b1b1f; color: #eee; font: 14px system-ui, sans-serif; }
+      main { display: grid; gap: 12px; padding: 12px; max-width: 1100px; margin: auto; }
+      .bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+      button { font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid #555; background: #2a2a30; color: inherit; cursor: pointer; }
+      button[aria-pressed="true"] { background: #e2b54a; color: #111; border-color: #e2b54a; font-weight: 600; }
+      canvas { width: 100%; background: #000; border-radius: 8px; }
+      #info { font: 13px ui-monospace, monospace; color: #bbb; white-space: pre-wrap; }
+      small { color: #999; }
+    </style>
+  </head>
+  <body>
+    <!-- Dev only, never built: a Dofus character puppeted by the webcam (head, torso, arms), see prototypes/character.
+         Pieces come from prototypes/character/scripts/export-live.mjs. ?source=<image> films a still image instead. -->
+    <main>
+      <div class="bar">
+        <button id="start">Démarrer la caméra</button>
+        <button id="demo">Démo sans caméra</button>
+        <span>Affichage :</span>
+        <button data-show="vtuber" aria-pressed="true">VTuber</button>
+        <button data-show="overlay" aria-pressed="false">Sur la vidéo</button>
+      </div>
+      <div class="bar">
+        <span>Direction :</span>
+        <button data-dir="auto" aria-pressed="true">auto (yaw)</button>
+        <button data-dir="1" aria-pressed="false">3/4</button>
+        <button data-dir="2" aria-pressed="false">face</button>
+        <span>Bras hors champ :</span>
+        <button data-rest="idle" aria-pressed="true">le long du corps</button>
+        <button data-rest="desk" aria-pressed="false">sur le bureau</button>
+        <label><input id="skeleton" type="checkbox" checked /> squelette</label>
+      </div>
+      <div class="bar">
+        <span>Rotation :</span>
+        <button data-head="A" aria-pressed="false">A · paliers</button>
+        <button data-head="C" aria-pressed="true">C · tête RIFE, corps en paliers</button>
+        <button data-head="CC" aria-pressed="false">CC · tout en RIFE (comparaison)</button>
+        <small>Espace : basculer</small>
+        <label>3/4 : tête à <input id="yaw34" type="range" min="15" max="60" step="1" value="35" /> <span id="yaw34v"></span>°</label>
+        <label>corps à <input id="yaw34b" type="range" min="10" max="60" step="1" value="25" /> <span id="yaw34bv"></span>°</label>
+        <label><input id="manual" type="checkbox" /> Yaw manuel</label>
+        <input id="yaw" type="range" min="-60" max="60" step="0.5" value="0" disabled />
+      </div>
+      <canvas id="canvas" width="1280" height="720"></canvas>
+      <div id="info">—</div>
+      <small>Expressions (3/4 seulement) : yeux fermés → clignement, sourire, sourire + bouche ouverte → mdr, bouche ouverte + yeux écarquillés → peur, sourcils froncés → énervé, langue → moqueur. De face : bouche ouverte seulement.</small>
+    </main>
+    <script type="module" src="./puppet.ts"></script>
+  </body>
+</html>

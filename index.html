@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Essayage Dofus · coiffes, capes et ailes sur votre webcam</title>
+    <meta name="description" content="Essayez 635 coiffes, 379 capes et 36 ailes de Dofus sur votre webcam et prenez une photo. Gratuit, rien n'est envoyé : tout reste dans votre navigateur." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://virtual-try-on-dofus.tom-girou.dev/" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0d0f17" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Link previews (Discord, Facebook, X, messaging apps) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Essayage Dofus" />
+    <meta property="og:url" content="https://virtual-try-on-dofus.tom-girou.dev/" />
+    <meta property="og:title" content="Essayage Dofus · coiffes, capes et ailes sur votre webcam" />
+    <meta property="og:description" content="635 coiffes, 379 capes et 36 ailes de Dofus à essayer en direct devant votre webcam. Gratuit, sans inscription, rien n'est envoyé." />
+    <meta property="og:image" content="https://virtual-try-on-dofus.tom-girou.dev/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Coiffes, capes et ailes de Dofus prêtes à essayer sur une webcam" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:locale:alternate" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Essayage Dofus",
+        "url": "https://virtual-try-on-dofus.tom-girou.dev/",
+        "description": "Essayez les coiffes, capes et ailes de Dofus en direct sur votre webcam, puis prenez une photo. Fansite non officiel : tout se passe dans le navigateur.",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "Navigateur web avec webcam",
+        "inLanguage": ["fr", "en", "es", "pt"],
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+        "image": "https://virtual-try-on-dofus.tom-girou.dev/og.png"
+      }
+    </script>
+  </head>
+  <body>
+    <!-- The French texts below are the static fallback for crawlers and link previews; main.ts swaps in the visitor's language -->
+    <header class="bar">
+      <h1 class="wordmark"><span data-i18n="title">Essayage de coiffes et capes Dofus</span></h1>
+      <label class="lang">
+        <span class="visually-hidden" data-i18n="language">Langue</span>
+        <select id="lang"></select>
+      </label>
+    </header>
+
+    <main class="bench">
+      <div class="stage-col">
+        <section class="stage" aria-live="polite">
+          <video id="video" playsinline muted hidden></video>
+          <canvas id="canvas"></canvas>
+          <div id="gate" class="gate">
+            <p class="gate__lede" data-i18n="subtitle">Essayez les coiffes et les capes de Dofus devant votre webcam.</p>
+            <button id="start" class="btn btn--accent" type="button" data-i18n="startCamera">Activer la caméra</button>
+            <p class="gate__note" data-i18n="privacy">Tout se passe dans votre navigateur : aucune image ne quitte votre appareil.</p>
+          </div>
+          <p id="status" class="status" hidden></p>
+          <div id="countdown" class="countdown" hidden></div>
+          <div id="flash" class="flash"></div>
+        </section>
+
+        <div class="shutter-bar">
+          <label class="toggle"><input id="useCountdown" type="checkbox" /> <span data-i18n="countdown">Compte à rebours (3 s)</span></label>
+          <button id="shoot" class="shutter" type="button" disabled>
+            <span class="shutter__ring" aria-hidden="true"></span>
+            <span class="shutter__label" data-i18n="takePhoto">Prendre une photo</span>
+          </button>
+        </div>
+
+        <!-- "Ajuster la position" goes here, under the webcam -->
+        <div id="below-stage"></div>
+      </div>
+
+      <aside class="inventory" aria-label="Inventaire">
+        <h2 class="visually-hidden" data-i18n="chooseTenue">Composez votre tenue</h2>
+        <div class="slots" role="tablist">
+          <button id="tab-coiffe" class="slot" type="button" role="tab" data-emplacement="coiffe">Coiffe</button>
+          <button id="tab-cape" class="slot" type="button" role="tab" data-emplacement="cape">Cape</button>
+          <button id="tab-ailes" class="slot" type="button" role="tab" data-emplacement="ailes">Ailes</button>
+          <button id="tab-epaulieres" class="slot" type="button" role="tab" data-emplacement="epaulieres">Épaulières</button>
+          <button id="tab-costume" class="slot" type="button" role="tab" data-emplacement="costume">Costume</button>
+        </div>
+        <div class="finder">
+          <input id="search" class="search" type="search" autocomplete="off" aria-label="Rechercher par nom" />
+          <p id="count" class="count"></p>
+        </div>
+        <ul id="picker" class="picker" role="tabpanel"></ul>
+      </aside>
+    </main>
+
+    <footer class="foot"><p data-i18n="disclaimer">Fansite non officiel. Dofus est une marque d'Ankama. Aucune image ne quitte votre appareil.</p></footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

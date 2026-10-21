@@ -1,0 +1,16 @@
+# Rotation des coiffes par images intermédiaires RIFE
+
+Avec deux Vues seulement (ADR 0001), la coiffe sautait de la face au 3/4 au Palier de 15°. Pour qu'elle tourne avec la tête, chaque Coiffe a désormais une Rotation : entre sa Vue de face et sa Vue de 3/4, 5 images intermédiaires générées hors ligne par RIFE v4.6 (interpolation d'images par IA, binaire rife-ncnn-vulkan, GPU). Chaque Calque est interpolé séparément pour que la tête reste entre les deux, la couleur et l'alpha en deux passes (RIFE n'a pas d'alpha). L'alpha est resserré pour éviter les taches à moitié transparentes. Dans l'app, la position le long de la Rotation suit le yaw : la Vue de face jusqu'à 5° (une tête immobile oscille de quelques degrés), la Vue de 3/4 à partir de 35°, et les images intermédiaires entre les deux. Le Réglage glisse de celui de la Vue de face à celui de la Vue de 3/4.
+
+**Une seule image à la fois.** Une image ne change que quand le yaw en est nettement plus proche (hystérésis d'un quart de pas), avec un fondu de 90 ms au changement. Le premier essai fondait en permanence deux images voisines : comme elles diffèrent parfois beaucoup, et comme l'oscillation du yaw empêchait de se poser sur une seule, la coiffe montrait une double exposition même tête immobile.
+
+Le prototype (`prototypes/inbetween/`) a comparé trois méthodes : fondu enchaîné, étirement de la silhouette et RIFE. Seul RIFE donne l'impression d'une rotation, et seulement entre face et 3/4 : vers le profil, ou sur un buste de personnage (`prototypes/character/`), il produit une bouillie dès que la forme change trop. Pour la même raison, certaines coiffes ratent : la Coiffe du Bouftou (239), par exemple, a des taches noires au début de sa Rotation. Ces coiffes sont exclues après relecture des planches (`tools/extraction/tours-sheet.mjs` → `tools/extraction/tours.config.json`) et gardent le saut au Palier.
+
+Conséquences :
+
+- **Assets.** Une bande WebP par Calque et par Coiffe (`public/coiffes/<skin>/tour_<front|back>.webp`), métadonnées dans `src/data/tours.json`, environ +80 Ko par Coiffe (≈ 65 Mo pour le catalogue). Seule la coiffe portée est téléchargée.
+- **Génération.** Environ 1 h 30 de GPU pour tout le catalogue. Le script reprend là où il s'est arrêté. À relancer pour les nouvelles coiffes après `npm run assets:catalogue`.
+- **Calques propres à une seule Vue.** Un Calque que l'autre Vue n'a pas (un arrière de chapeau présent seulement de 3/4, par exemple) n'a pas d'images : il bascule à mi-chemin.
+- **Ajustement.** Pendant qu'on règle la position (curseur, glisser, molette, réinitialiser) et 1,5 s après, la coiffe montre la Vue réglée telle quelle, pour qu'on voie exactement ce qu'on règle. Le panneau simplement ouvert garde la Rotation : une première version la coupait tant que le panneau restait ouvert, et l'utilisateur croyait que RIFE avait disparu après un réglage.
+- **Assets générés par IA.** Ce sont des images dérivées des rendus du client, produites par IA : le choix de les publier est celui de l'utilisateur (comme pour les Vues elles-mêmes).
+- **Capes, ailes, épaulières, costumes.** Elles gardent les Paliers : le buste interpolé du prototype personnage ne tenait pas, et ces visuels sont plus grands et plus déformés d'une Vue à l'autre.

@@ -1,0 +1,57 @@
+/* Hallmark · genre: atmospheric · macrostructure: Workbench + Catalogue · theme: Midnight · anchor hue: 265 / accent 80
+ * Design tokens: every colour, font and space value in the app reads from here.
+ */
+:root {
+  /* Paper: near-black with a cool violet tilt; the webcam is the only light source */
+  --color-paper:    oklch(15% 0.012 265);
+  --color-paper-2:  oklch(19% 0.014 265);
+  --color-paper-3:  oklch(24% 0.016 265);
+  --color-stage:    oklch(10% 0.010 265);
+  --color-rule:     oklch(30% 0.014 265);
+  --color-rule-2:   oklch(40% 0.014 265);
+  --color-muted:    oklch(68% 0.012 265);
+  --color-ink-2:    oklch(82% 0.010 265);
+  --color-ink:      oklch(95% 0.006 265);
+  /* One accent: Dofus gold, on the active slot, the shutter and focus only */
+  --color-accent:     oklch(80% 0.14 80);
+  --color-accent-2:   oklch(72% 0.15 75);
+  --color-accent-ink: oklch(20% 0.04 80);
+  --color-accent-wash: oklch(80% 0.14 80 / 0.10);
+  --color-focus:    oklch(85% 0.15 85);
+  --color-danger:   oklch(70% 0.16 25);
+  --color-scrim:    oklch(10% 0.010 265 / 0.72);
+  --color-flash:    oklch(98% 0.004 265);
+
+  --font-display: "Bricolage Grotesque Variable", "Segoe UI", sans-serif;
+  --font-body:    "Geist Variable", "Segoe UI", sans-serif;
+  --font-mono:    "Geist Mono Variable", ui-monospace, monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-xs:  0.75rem;
+  --text-sm:  0.875rem;
+  --text-md:  1rem;
+  --text-lg:  1.25rem;
+  --text-xl:  1.75rem;
+  --text-countdown: clamp(4rem, 12vw, 8rem);
+  --tracking-tight: -0.02em;
+  --tracking-micro: 0.08em;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs:  0.75rem;
+  --space-sm:  1rem;
+  --space-md:  1.5rem;
+  --space-lg:  2rem;
+  --space-xl:  3rem;
+
+  --radius-stage: 6px;
+  --radius-control: 4px;
+  --radius-round: 999px;
+  --rule: 1px solid var(--color-rule);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-short: 140ms;
+  --dur-flash: 350ms;
+}

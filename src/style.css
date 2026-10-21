@@ -1,0 +1,430 @@
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4 */
+/* Hallmark · genre: atmospheric · macrostructure: Workbench + Catalogue · theme: Midnight · anchor hue: 265 / accent 80
+ * nav: N9 edge-aligned · footer: Ft2 inline single line · enrichment: none (the webcam is the subject)
+ * tone: dark atmospheric · audience: Dofus players · use: try an outfit on, take a photo
+ */
+@import "./tokens.css";
+
+* { box-sizing: border-box; }
+
+html, body { overflow-x: clip; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-paper);
+  color: var(--color-ink-2);
+  font: 400 var(--text-md) / 1.5 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+/* ---------- Bar (N9 edge-aligned) ---------- */
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  border-bottom: var(--rule);
+}
+.wordmark {
+  margin: 0;
+  min-width: 0;
+  font: 650 var(--text-lg) / 1.1 var(--font-display);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+.lang select {
+  font: 500 var(--text-sm) var(--font-body);
+  color: var(--color-ink-2);
+  background: var(--color-paper-2);
+  border: var(--rule);
+  border-radius: var(--radius-control);
+  padding: var(--space-3xs) var(--space-xs);
+  cursor: pointer;
+}
+.lang select:hover { border-color: var(--color-rule-2); }
+
+/* ---------- Bench: stage left, inventory right ---------- */
+
+.bench {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: var(--space-md);
+  padding: var(--space-md);
+  align-items: start;
+}
+.stage-col { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; }
+
+.stage {
+  position: relative;
+  background: var(--color-stage);
+  border: var(--rule);
+  border-radius: var(--radius-stage);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+#canvas { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.gate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+}
+.gate[hidden] { display: none; }
+.gate__lede {
+  margin: 0;
+  max-width: 22ch;
+  font: 600 var(--text-xl) / 1.15 var(--font-display);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+}
+.gate__note { margin: 0; max-width: 46ch; font-size: var(--text-sm); color: var(--color-muted); }
+
+/* Camera readout, top-left like a viewfinder label */
+.status {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  max-width: calc(100% - var(--space-lg));
+  margin: 0;
+  padding: var(--space-3xs) var(--space-2xs);
+  background: var(--color-scrim);
+  border-radius: var(--radius-control);
+  font: 500 var(--text-xs) / 1.4 var(--font-mono);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+.status[hidden] { display: none; }
+
+.countdown {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: 700 var(--text-countdown) / 1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+.countdown[hidden] { display: none; }
+.flash { position: absolute; inset: 0; background: var(--color-flash); opacity: 0; pointer-events: none; }
+.flash.on { animation: flash var(--dur-flash) var(--ease-out); }
+@keyframes flash { from { opacity: 0.8; } to { opacity: 0; } }
+
+/* ---------- Shutter bar ---------- */
+
+.shutter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.shutter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-3xs);
+  font: 600 var(--text-md) / 1 var(--font-body);
+  white-space: nowrap;
+  color: var(--color-ink);
+  background: var(--color-paper-2);
+  border: var(--rule);
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+}
+.shutter__ring {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-round);
+  border: 2px solid var(--color-accent);
+  box-shadow: inset 0 0 0 4px var(--color-paper-2);
+  background: var(--color-accent);
+  transition: transform var(--dur-short) var(--ease-out);
+}
+.shutter:hover:not(:disabled) { border-color: var(--color-rule-2); background: var(--color-paper-3); }
+.shutter:hover:not(:disabled) .shutter__ring { box-shadow: inset 0 0 0 4px var(--color-paper-3); }
+.shutter:active:not(:disabled) .shutter__ring { transform: scale(0.92); }
+.shutter:disabled { cursor: not-allowed; color: var(--color-muted); }
+.shutter:disabled .shutter__ring { background: var(--color-rule); border-color: var(--color-rule-2); }
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.toggle input { accent-color: var(--color-accent); width: 1rem; height: 1rem; margin: 0; }
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  font: 600 var(--text-md) / 1 var(--font-body);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-control);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--dur-short) var(--ease-out);
+}
+.btn--accent { background: var(--color-accent); color: var(--color-accent-ink); }
+.btn--accent:hover { background: var(--color-accent-2); }
+.btn--accent:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- Inventory (Catalogue) ---------- */
+
+.inventory {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-paper-2);
+  border: var(--rule);
+  border-radius: var(--radius-stage);
+  position: sticky;
+  top: var(--space-md);
+  max-height: calc(100vh - 2 * var(--space-md));
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Equipment slots: the worn item sits under the slot name */
+/* Five slots on hairlines, wrapping to as many rows as the panel needs; the last row shares its whole width */
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  background: var(--color-rule);
+  border-bottom: var(--rule);
+}
+.slot {
+  flex: 1 1 6.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  padding: var(--space-xs) var(--space-sm);
+  font: 600 var(--text-md) / 1.2 var(--font-display);
+  text-align: left;
+  color: var(--color-muted);
+  background: var(--color-paper-2);
+  border: 0;
+  box-shadow: inset 0 -2px 0 transparent;
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+}
+.slot small {
+  max-width: 100%;
+  font: 400 var(--text-xs) / 1.3 var(--font-body);
+  color: var(--color-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.slot:hover { color: var(--color-ink); background: var(--color-paper-3); }
+.slot[aria-selected="true"] { color: var(--color-ink); box-shadow: inset 0 -2px 0 var(--color-accent); }
+.slot[aria-selected="true"] small { color: var(--color-ink-2); }
+
+.finder { padding: var(--space-sm); border-bottom: var(--rule); display: grid; gap: var(--space-2xs); }
+.search {
+  width: 100%;
+  font: 400 var(--text-md) var(--font-body);
+  padding: var(--space-2xs) var(--space-xs);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  border: var(--rule);
+  border-radius: var(--radius-control);
+}
+.search::placeholder { color: var(--color-muted); }
+.search:hover { border-color: var(--color-rule-2); }
+.search:focus-visible { outline-offset: 0; border-color: var(--color-focus); }
+.count {
+  margin: 0;
+  font: 500 var(--text-2xs) / 1.4 var(--font-mono);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+/* Hairline grid of identical cells: the rules come from the gap over the rule-coloured ground */
+.picker {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--color-rule);
+  overflow-y: auto;
+  align-content: start;
+  flex: 1;
+  min-height: 12rem;
+}
+.picker li { display: flex; background: var(--color-paper-2); }
+.picker button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-width: 0;
+  padding: var(--space-sm) var(--space-2xs) var(--space-xs);
+  font: 500 var(--text-xs) / 1.3 var(--font-body);
+  text-align: center;
+  color: var(--color-ink-2);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  transition: background-color var(--dur-short) var(--ease-out);
+}
+.picker img { width: 56px; height: 56px; }
+.picker button:hover { background: var(--color-paper-3); color: var(--color-ink); }
+.picker button[aria-pressed="true"] {
+  background: var(--color-accent-wash);
+  color: var(--color-ink);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+.picker button:disabled { opacity: 0.4; cursor: not-allowed; }
+.picker button:focus-visible { outline-offset: -2px; }
+.picker .none-tile {
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  border: 1px dashed var(--color-rule-2);
+  border-radius: var(--radius-round);
+  font: 400 var(--text-lg) var(--font-mono);
+  color: var(--color-muted);
+}
+
+/* ---------- Footer (Ft2) ---------- */
+
+.foot {
+  padding: var(--space-sm) var(--space-md);
+  border-top: var(--rule);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+.foot p { margin: 0; }
+
+/* ---------- "Ajuster la position", under the webcam (closed by default) ---------- */
+
+.calibration {
+  border: var(--rule);
+  border-radius: var(--radius-stage);
+  background: var(--color-paper-2);
+}
+.calibration > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-sm);
+  font: 600 var(--text-sm) / 1.2 var(--font-body);
+  color: var(--color-ink-2);
+  white-space: nowrap;
+  cursor: pointer;
+  list-style: none;
+}
+.calibration > summary::-webkit-details-marker { display: none; }
+.calibration > summary::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--dur-short) var(--ease-out);
+}
+.calibration[open] > summary::before { transform: rotate(45deg); }
+.calibration > summary:hover { color: var(--color-ink); }
+.calibration[open] > summary { border-bottom: var(--rule); }
+.calibration > .hint { padding: var(--space-sm) var(--space-sm) 0; max-width: 70ch; }
+.calibration > .cal-grid { padding: var(--space-sm); }
+.cal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--space-md); align-items: start; }
+.cal-col { display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; }
+.calibration .hint, .calibration .target { margin: 0; font-size: var(--text-sm); color: var(--color-muted); }
+.calibration .target { color: var(--color-ink); font-weight: 600; }
+.calibration .vue-status { font: 400 var(--text-xs) var(--font-mono); font-variant-numeric: tabular-nums; }
+.calibration .seg, .calibration .row { display: flex; flex-wrap: wrap; gap: var(--space-3xs); }
+.calibration .seg button, .calibration .row button, .calibration button[data-act="copy"] {
+  flex: 1;
+  font: 500 var(--text-sm) var(--font-body);
+  white-space: nowrap;
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-control);
+  border: var(--rule);
+  background: var(--color-paper);
+  color: var(--color-ink-2);
+  cursor: pointer;
+}
+.calibration .seg button:hover:not(:disabled), .calibration .row button:hover, .calibration button[data-act="copy"]:hover {
+  border-color: var(--color-rule-2);
+  color: var(--color-ink);
+}
+.calibration .seg button[aria-pressed="true"] { border-color: var(--color-accent); color: var(--color-ink); background: var(--color-accent-wash); }
+.calibration .seg button:disabled { opacity: 0.4; cursor: not-allowed; }
+.calibration .field { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px var(--space-2xs); font-size: var(--text-xs); color: var(--color-muted); }
+.calibration .field input { grid-column: 1 / -1; width: 100%; accent-color: var(--color-accent); }
+.calibration output { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--color-ink); }
+.calibration .primary {
+  font: 600 var(--text-sm) / 1 var(--font-body);
+  white-space: nowrap;
+  padding: var(--space-xs) var(--space-sm);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  cursor: pointer;
+}
+.calibration .primary:hover { background: var(--color-accent-2); }
+/* While the panel is open, the item can be dragged on the image */
+body:has(.calibration[open]) #canvas { cursor: grab; touch-action: none; }
+.calibration .field input:disabled { opacity: 0.4; }
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 860px) {
+  .bar { padding: var(--space-xs) var(--space-sm); }
+  .bench { grid-template-columns: minmax(0, 1fr); padding: var(--space-sm); gap: var(--space-sm); }
+  .stage { aspect-ratio: 4 / 3; }
+  .gate { padding: var(--space-md); }
+  .inventory { position: static; max-height: none; }
+  .picker { max-height: 60vh; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .foot { padding: var(--space-sm); }
+}
+@media (max-width: 480px) {
+  .wordmark { font-size: var(--text-md); }
+  .picker { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .slot { padding: var(--space-xs) var(--space-2xs); }
+  /* Before the camera starts, the stage grows to fit its intro instead of clipping it */
+  .stage:has(.gate:not([hidden])) { aspect-ratio: auto; min-height: 16rem; }
+  .gate { position: relative; padding: var(--space-md) var(--space-sm); }
+  .gate__lede { font-size: var(--text-lg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; }
+  .flash.on { animation-duration: 150ms; }
+}

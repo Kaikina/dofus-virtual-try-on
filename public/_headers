@@ -1,0 +1,18 @@
+# Cloudflare Pages response headers.
+# The camera is the only powerful feature the page uses, and only for itself.
+/*
+  Permissions-Policy: camera=(self), microphone=(), geolocation=()
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+
+# Hashed build output and item images never change under the same URL
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/coiffes/*
+  Cache-Control: public, max-age=604800
+/capes/*
+  Cache-Control: public, max-age=604800
+/ailes/*
+  Cache-Control: public, max-age=604800
+/mediapipe/*
+  Cache-Control: public, max-age=2592000

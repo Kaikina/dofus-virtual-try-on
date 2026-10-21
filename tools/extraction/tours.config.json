@@ -1,0 +1,4 @@
+{
+  "//": "Skins left out of rife-coiffes.mjs: their RIFE turn looked wrong at review (tours-sheet.mjs), they keep snapping between Vues.",
+  "exclude": [239]
+}

@@ -1,0 +1,34 @@
+node_modules/
+dist/
+public/mediapipe/
+*.log
+.extraction-cache/
+dev/fixtures/
+.dev-snapshots/
+.wrangler/
+
+# Images extracted from Ankama's Dofus client, or derived from it (renders, RIFE frames): not redistributed here.
+# Regenerate them from your own client install, see README "Catalogue".
+public/coiffes/
+public/capes/
+public/ailes/
+public/costumes/
+public/epaulieres/
+public/favicon.png
+public/og.png
+docs/spike/*.png
+prototypes/**/*.png
+prototypes/**/*.webp
+prototypes/**/*.gif
+prototypes/inbetween/views/
+prototypes/inbetween/rife/
+prototypes/inbetween/rife-live/
+prototypes/inbetween/live/
+prototypes/character/live/
+prototypes/character/out/
+
+# Locally installed agent skills (third-party)
+.agents/
+.claude/skills/
+.hallmark/
+skills-lock.json

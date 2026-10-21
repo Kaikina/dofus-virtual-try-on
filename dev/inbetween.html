@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vues intermédiaires</title>
+    <style>
+      body { margin: 0; background: #1b1b1f; color: #eee; font: 14px system-ui, sans-serif; }
+      main { display: grid; gap: 12px; padding: 12px; max-width: 1100px; margin: auto; }
+      .bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+      button { font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid #555; background: #2a2a30; color: inherit; cursor: pointer; }
+      button[aria-pressed="true"] { background: #e2b54a; color: #111; border-color: #e2b54a; font-weight: 600; }
+      canvas { width: 100%; background: #000; border-radius: 8px; }
+      #info { font: 13px ui-monospace, monospace; color: #bbb; }
+      small { color: #999; }
+    </style>
+  </head>
+  <body>
+    <!-- Dev only, never built: compares the current Vue switching (A) with RIFE in-between frames (C) on the live
+         webcam. Frames come from prototypes/inbetween/live.mjs. ?source=<image> films a still image instead. -->
+    <main>
+      <div class="bar">
+        <button id="start">Démarrer la caméra</button>
+        <span>Méthode :</span>
+        <button data-mode="A" aria-pressed="true">A · paliers (prod)</button>
+        <button data-mode="C" aria-pressed="false">C · RIFE</button>
+        <small>Espace : basculer</small>
+      </div>
+      <div class="bar">
+        <span>Coiffe :</span>
+        <span id="hats"></span>
+      </div>
+      <div class="bar">
+        <label>Yaw où la vue 3/4 est atteinte (C) : <input id="yaw34" type="range" min="15" max="60" step="1" value="35" /> <span id="yaw34v"></span>°</label>
+        <label><input id="manual" type="checkbox" /> Yaw manuel</label>
+        <input id="yaw" type="range" min="-60" max="60" step="0.5" value="0" disabled />
+      </div>
+      <canvas id="canvas"></canvas>
+      <div id="info">—</div>
+    </main>
+    <script type="module" src="./inbetween.ts"></script>
+  </body>
+</html>

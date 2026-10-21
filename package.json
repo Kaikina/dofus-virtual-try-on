@@ -1,0 +1,29 @@
+{
+  "name": "dofus-virtual-try-on",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "setup:mediapipe": "node tools/setup-mediapipe.mjs",
+    "assets:catalogue": "node tools/extraction/build-catalogue.mjs",
+    "assets:og": "node tools/make-og.mjs",
+    "deploy": "npm run setup:mediapipe && npm test && npm run build && wrangler deploy"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4",
+    "wrangler": "^4.151.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@mediapipe/tasks-vision": "^1.1.1"
+  }
+}

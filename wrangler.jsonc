@@ -1,0 +1,12 @@
+// Cloudflare Workers static assets: the whole site is the built `dist/` folder, no server code.
+{
+  "name": "dofus-essayage",
+  "compatibility_date": "2026-10-12",
+  // Cloudflare creates the DNS record and the certificate for this subdomain of the tom-girou.dev zone
+  "routes": [{ "pattern": "virtual-try-on-dofus.tom-girou.dev", "custom_domain": true }],
+  "assets": {
+    "directory": "./dist",
+    // A single page without client-side routes: unknown URLs get a real 404 (not a duplicate of the home page)
+    "not_found_handling": "404-page"
+  }
+}
